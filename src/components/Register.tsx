@@ -2,25 +2,24 @@ import { Box, TextField, Button, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-
-interface LoginInputs {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+import { register as registerUser } from "../api/auth";
+import { RegisterInputs } from "..";
 
 interface RegisterProps {
   onSwitch: () => void;
+  onGetToken: (token: string) => void;
 }
 
-const Register = ({ onSwitch }: RegisterProps) => {
+const Register = ({ onSwitch, onGetToken }: RegisterProps) => {
   const navgiate = useNavigate();
-  const { register, handleSubmit } = useForm<LoginInputs>();
+  const { register, handleSubmit } = useForm<RegisterInputs>();
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-    console.log(data);
-    navgiate("/feedback");
+  const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
+    const ret = await registerUser(data);
+    if (ret?.token) {
+      onGetToken(ret.token);
+      navgiate("/feedback");
+    }
   };
 
   return (
@@ -31,32 +30,21 @@ const Register = ({ onSwitch }: RegisterProps) => {
       sx={{ mt: 3 }}
     >
       <Grid container spacing={2}>
-        <Grid
-          size={{
-            xs: 12,
-            sm: 6,
-          }}
-        >
+        <Grid size={12}>
           <TextField
             fullWidth
-            label="First Name"
-            autoFocus
+            id="fullname"
+            label="Full Name"
             variant="standard"
-            {...register("firstName", { required: true })}
+            {...register("fullname", { required: true })}
           />
         </Grid>
-        <Grid
-          size={{
-            xs: 12,
-            sm: 6,
-          }}
-        >
+        <Grid size={12}>
           <TextField
             fullWidth
-            id="lastName"
-            label="Last Name"
+            label="Workspace"
             variant="standard"
-            {...register("lastName", { required: true })}
+            {...register("workspace", { required: true })}
           />
         </Grid>
         <Grid size={12}>

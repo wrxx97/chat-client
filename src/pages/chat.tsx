@@ -1,13 +1,20 @@
-import { useState } from "react";
-import { Box, TextField, Button } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import MessageList from "../components/MessageList";
-import UserList from "../components/UserList";
+import ChatList from "../components/ChatList";
 import Header from "../components/Header";
 import MessageSend from "../components/MessageSend";
 import NavBar from "../components/NavBar";
+import { useChatStore } from "../store";
 
 const ChatApp = () => {
+  const queryChatList = useChatStore((state) => state.queryChat);
+
+  useEffect(() => {
+    queryChatList();
+  }, []);
+
   const [messages, setMessages] = useState([
     {
       sender: "Alice",
@@ -29,6 +36,7 @@ const ChatApp = () => {
 
   const [currentMessage, setCurrentMessage] = useState("");
   const currentUser = "Bob";
+  const chatList = useChatStore((state) => state.chatList);
 
   const handleSend = () => {
     if (currentMessage.trim() !== "") {
@@ -54,20 +62,25 @@ const ChatApp = () => {
       }}
     >
       <NavBar>
+        <ChatList chats={chatList} />
         <Grid
           container
           sx={{
             height: "100%",
-            width: "calc(100% - 50px)",
+            width: "calc(100% - 350px)",
             display: "flex",
             flexDirection: "row",
             flexGrow: 1,
           }}
         >
-          <Grid size={3}>
-            <UserList />
-          </Grid>
-          <Grid size={9}>
+          <Grid
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+            }}
+          >
             <Box
               sx={{
                 maxWidth: "100%",

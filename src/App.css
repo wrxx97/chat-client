@@ -123,10 +123,7 @@ table {
   border-spacing: 0;
 }
 
-html {
-  height: 100vh;
-}
-
+html,
 body,
 #root {
   height: 100%;

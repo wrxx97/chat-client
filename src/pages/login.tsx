@@ -1,11 +1,16 @@
-import { memo, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { Box, Typography, Container, Avatar, IconButton } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { jwtDecode } from "jwt-decode";
 
 import Login from "../components/Login";
 import Register from "../components/Register";
+import useWindowResize from "../hooks/useWindowResize";
+import { setAccessToken } from "../utils/token";
+import { UserInfo } from "..";
+import { useAppStore } from "../store";
 
 export interface LoginFormProps {
   email: string;
@@ -14,16 +19,25 @@ export interface LoginFormProps {
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const setCurrentUser = useAppStore((state) => state.setUser);
+
+  const pageRef = useRef<HTMLDivElement>(null);
+  useWindowResize(pageRef);
 
   const handleClose = () => {
     return getCurrentWindow().close();
   };
 
+  const afterGetToken = (token: string) => {
+    setAccessToken(token);
+    const decoded: UserInfo = jwtDecode(token);
+    setCurrentUser(decoded);
+  };
+
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" ref={pageRef}>
       <Box
         sx={{
-          marginTop: 8,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -48,9 +62,15 @@ const LoginPage = () => {
         </Typography>
         <Box>
           {isLogin ? (
-            <Login onSwitch={() => setIsLogin(false)} />
+            <Login
+              onSwitch={() => setIsLogin(false)}
+              onGetToken={afterGetToken}
+            />
           ) : (
-            <Register onSwitch={() => setIsLogin(true)} />
+            <Register
+              onSwitch={() => setIsLogin(true)}
+              onGetToken={afterGetToken}
+            />
           )}
         </Box>
       </Box>

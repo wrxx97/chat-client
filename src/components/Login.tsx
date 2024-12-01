@@ -1,29 +1,29 @@
 import { Box, TextField, Button, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
-
-export interface LoginFormProps {
-  email: string;
-  password: string;
-}
+import { login } from "../api/auth";
+import { LoginInputs } from "..";
 
 interface LoginProps {
   onSwitch: () => void;
+  onGetToken: (token: string) => void;
 }
 
-interface LoginInputs {
-  email: string;
-  password: string;
-}
-
-const Login = ({ onSwitch }: LoginProps) => {
+const Login = ({ onSwitch, onGetToken }: LoginProps) => {
   const navgiate = useNavigate();
   const { register, handleSubmit } = useForm<LoginInputs>();
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-    console.log(data);
-    navgiate("/chat");
+  const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
+    // console.log(data);
+    let ret = await login(data);
+    console.log(ret);
+    if (ret?.token) {
+      onGetToken(ret.token);
+      navgiate("/chat");
+      const appWindow = getCurrentWindow();
+      appWindow.setSize(new LogicalSize(800, 600));
+    }
   };
 
   return (

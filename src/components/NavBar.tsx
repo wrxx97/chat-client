@@ -5,6 +5,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import LogoutIcon from "@mui/icons-material/Logout";
+import PeopleIcon from "@mui/icons-material/People";
 import { useAppStore } from "../store";
 import { useNavigate } from "react-router";
 
@@ -12,6 +14,7 @@ const NavBar = ({ children }: { children: ReactNode }) => {
   const navgiate = useNavigate();
   const darkMode = useAppStore((state) => state.darkMode);
   const toggleDarkMode = useAppStore((state) => state.toggleDarkMode);
+  const logout = useAppStore((state) => state.logout);
 
   const [selectedTab, setSelectedTab] = useState(0);
 
@@ -45,7 +48,7 @@ const NavBar = ({ children }: { children: ReactNode }) => {
           sx={{ alignItems: "flex-start" }}
         />
         <Tab
-          icon={<InfoIcon />}
+          icon={<PeopleIcon />}
           iconPosition="start"
           sx={{ alignItems: "flex-start" }}
         />
@@ -59,16 +62,22 @@ const NavBar = ({ children }: { children: ReactNode }) => {
           iconPosition="start"
           sx={{ alignItems: "flex-start" }}
         />
-        <IconButton
-          onClick={toggleDarkMode}
+        <Box
           sx={{
+            display: "flex",
+            flexDirection: "column",
             position: "absolute",
             bottom: 8,
             left: 0,
           }}
         >
-          {darkMode ? <DarkModeOutlinedIcon /> : <LightModeIcon />}
-        </IconButton>
+          <IconButton onClick={toggleDarkMode}>
+            {darkMode ? <DarkModeOutlinedIcon /> : <LightModeIcon />}
+          </IconButton>
+          <IconButton onClick={logout}>
+            <LogoutIcon />
+          </IconButton>
+        </Box>
       </Tabs>
       {children}
     </Box>

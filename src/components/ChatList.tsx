@@ -8,13 +8,11 @@ import {
   Typography,
   Divider,
   Box,
-  FormControl,
-  InputLabel,
-  Input,
   InputAdornment,
   OutlinedInput,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { Chat } from "..";
 
 const chatData = [
   {
@@ -40,9 +38,20 @@ const chatData = [
   },
 ];
 
-const ChatList = () => {
+interface ChatListProps {
+  chats: Chat[];
+}
+
+const ChatList = ({ chats }: ChatListProps) => {
   return (
-    <Box>
+    <Box
+      sx={{
+        width: 300,
+        height: "100%",
+        borderRight: 1,
+        borderColor: "divider",
+      }}
+    >
       <OutlinedInput
         id="input-with-icon-adornment"
         placeholder="Search"
@@ -61,17 +70,15 @@ const ChatList = () => {
       />
       <List
         sx={{
-          height: "100vh",
-          borderRight: 1,
-          borderColor: "divider",
+          height: "100%",
           overflowY: "auto",
         }}
       >
-        {[...chatData, ...chatData].map((chat) => (
+        {chats.map((chat) => (
           <React.Fragment key={chat.id}>
             <ListItem alignItems="flex-start" button>
               <ListItemAvatar>
-                <Avatar alt={chat.name} src={chat.avatar} />
+                <Avatar alt={chat.name} src={chat.name} />
               </ListItemAvatar>
               <ListItemText
                 primary={
@@ -87,7 +94,7 @@ const ChatList = () => {
                       color="text.secondary"
                       noWrap
                     >
-                      {chat.message}
+                      {chat.name}
                     </Typography>
                     <Typography
                       component="span"
@@ -95,7 +102,7 @@ const ChatList = () => {
                       color="text.secondary"
                       style={{ float: "right" }}
                     >
-                      {chat.time}
+                      {chat.created_at}
                     </Typography>
                   </React.Fragment>
                 }

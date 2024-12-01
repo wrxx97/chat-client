@@ -8,7 +8,7 @@ const useWindowResize = (targetRef: React.RefObject<HTMLElement>) => {
   useHeightObserver(targetRef, (height: number) => {
     console.log("Height:", height);
 
-    appWindow.setSize(new LogicalSize(600, height + 40));
+    appWindow.setSize(new LogicalSize(600, height));
   });
 };
 

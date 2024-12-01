@@ -31,8 +31,7 @@ const Header = () => {
       position="static"
       elevation={0}
       sx={{
-        // 背景色为Paper的颜色
-        backgroundColor: (theme) => theme.palette.background.paper,
+        backgroundColor: "background.paper",
         borderBottom: 1,
         borderColor: "divider",
       }}
