@@ -1,12 +1,13 @@
 import { Route, Routes } from "react-router";
-import Chat from "./pages/chat";
+import ChatLayout from "./pages/chat";
+
 import Login from "./pages/login";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Feedback from "./pages/feedback";
 import "./App.css";
 import { Box } from "@mui/material";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useAppStore } from "./store";
 import { ErrorProvider } from "./hooks/useError";
 import ErrorSnackbar from "./components/ErrorSnackBar";
@@ -40,7 +41,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/feedback" element={<Feedback />} />
-            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat/*" element={<ChatLayout />} />
+            <Route path="*" element={<div>404</div>} />
           </Routes>
         </Box>
       </ThemeProvider>

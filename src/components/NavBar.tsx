@@ -10,77 +10,79 @@ import PeopleIcon from "@mui/icons-material/People";
 import { useAppStore } from "../store";
 import { useNavigate } from "react-router";
 
-const NavBar = ({ children }: { children: ReactNode }) => {
+const NavBar = () => {
   const navgiate = useNavigate();
   const darkMode = useAppStore((state) => state.darkMode);
   const toggleDarkMode = useAppStore((state) => state.toggleDarkMode);
   const logout = useAppStore((state) => state.logout);
 
-  const [selectedTab, setSelectedTab] = useState(0);
-
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setSelectedTab(newValue);
-    if (newValue === 3) {
-      navgiate("/");
+  // 根据当前路由计算选中的tab
+  function getSelectedTab(): string {
+    const path = window.location.pathname;
+    if (path === "/chat/user") {
+      return "/user";
     }
+    return "/";
+  }
+
+  const [selectedTab, setSelectedTab] = useState(getSelectedTab());
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    setSelectedTab(newValue);
+    navgiate("/chat" + newValue);
   };
 
   return (
-    <Box sx={{ display: "flex", height: "100%" }}>
-      <Tabs
-        value={selectedTab}
-        onChange={handleTabChange}
-        orientation="vertical"
-        variant="scrollable"
+    <Tabs
+      value={selectedTab}
+      onChange={handleTabChange}
+      orientation="vertical"
+      variant="scrollable"
+      sx={{
+        borderRight: 1,
+        borderColor: "divider",
+        backgroundColor: (theme) => theme.palette.background.default,
+        ".MuiButtonBase-root": {
+          minWidth: 50,
+          width: 50,
+        },
+      }}
+    >
+      <Tab
+        icon={<HomeIcon />}
+        iconPosition="start"
+        sx={{ alignItems: "flex-start" }}
+        value="/"
+      />
+      <Tab
+        icon={<PeopleIcon />}
+        iconPosition="start"
+        sx={{ alignItems: "flex-start" }}
+        value="/user"
+      />
+      <Tab
+        icon={<SettingsIcon />}
+        iconPosition="start"
+        sx={{ alignItems: "flex-start" }}
+        value="setting"
+      />
+      <Box
         sx={{
-          borderRight: 1,
-          borderColor: "divider",
-          backgroundColor: (theme) => theme.palette.background.default,
-          ".MuiButtonBase-root": {
-            minWidth: 50,
-            width: 50,
-          },
+          display: "flex",
+          flexDirection: "column",
+          position: "absolute",
+          bottom: 8,
+          left: 0,
         }}
       >
-        <Tab
-          icon={<HomeIcon />}
-          iconPosition="start"
-          sx={{ alignItems: "flex-start" }}
-        />
-        <Tab
-          icon={<PeopleIcon />}
-          iconPosition="start"
-          sx={{ alignItems: "flex-start" }}
-        />
-        <Tab
-          icon={<SettingsIcon />}
-          iconPosition="start"
-          sx={{ alignItems: "flex-start" }}
-        />
-        <Tab
-          icon={<HomeIcon />}
-          iconPosition="start"
-          sx={{ alignItems: "flex-start" }}
-        />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            position: "absolute",
-            bottom: 8,
-            left: 0,
-          }}
-        >
-          <IconButton onClick={toggleDarkMode}>
-            {darkMode ? <DarkModeOutlinedIcon /> : <LightModeIcon />}
-          </IconButton>
-          <IconButton onClick={logout}>
-            <LogoutIcon />
-          </IconButton>
-        </Box>
-      </Tabs>
-      {children}
-    </Box>
+        <IconButton onClick={toggleDarkMode}>
+          {darkMode ? <DarkModeOutlinedIcon /> : <LightModeIcon />}
+        </IconButton>
+        <IconButton onClick={logout}>
+          <LogoutIcon />
+        </IconButton>
+      </Box>
+    </Tabs>
   );
 };
 

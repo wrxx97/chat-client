@@ -1,14 +1,36 @@
-import React from "react";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-  Avatar,
-} from "@mui/material";
+import { Box, List, ListItem, Typography, Avatar } from "@mui/material";
+import { Message, UserInfo } from "..";
+import dayjs from "dayjs";
+import { useChatStore } from "@/store";
 
-const MessageList = ({ messages, currentUser }) => {
+type MessageListProps = {
+  messages: Message[];
+};
+
+type MessageDetail = {
+  sender: UserInfo;
+} & Message;
+
+const MessageList = ({ messages }: MessageListProps) => {
+  const users = useChatStore((store) => store.users);
+  const currentUser = useChatStore((store) => store.currentUser)!;
+
+  const getMessageDetail = (
+    message: Message,
+    isOwnMessage: boolean
+  ): MessageDetail => {
+    let sender = isOwnMessage
+      ? currentUser
+      : users.find((user) => user.id === message.sender_id);
+    if (!sender) {
+      throw new Error("Sender not found");
+    }
+    return {
+      ...message,
+      sender,
+    };
+  };
+
   return (
     <Box
       sx={{
@@ -20,7 +42,9 @@ const MessageList = ({ messages, currentUser }) => {
     >
       <List>
         {messages.map((message, index) => {
-          const isOwnMessage = message.sender === currentUser;
+          const isOwnMessage = message.sender_id === currentUser.id;
+          const msg = getMessageDetail(message, isOwnMessage);
+          const sender = msg.sender!;
           return (
             <ListItem
               key={index}
@@ -31,12 +55,8 @@ const MessageList = ({ messages, currentUser }) => {
               }}
             >
               {!isOwnMessage && (
-                <Avatar
-                  sx={{ mr: 2 }}
-                  alt={message.sender}
-                  src={message.avatar || ""}
-                >
-                  {message.sender.charAt(0)}
+                <Avatar sx={{ mr: 2 }} alt={sender.fullname} src={""}>
+                  {sender.fullname.charAt(0)}
                 </Avatar>
               )}
               <Box
@@ -50,14 +70,14 @@ const MessageList = ({ messages, currentUser }) => {
                 }}
               >
                 <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                  {!isOwnMessage && message.sender}
+                  {!isOwnMessage && sender.fullname}
                 </Typography>
-                <Typography variant="body1">{message.text}</Typography>
+                <Typography variant="body1">{message.content}</Typography>
                 <Typography
                   variant="caption"
                   sx={{ display: "block", mt: 0.5, color: "text.secondary" }}
                 >
-                  {message.timestamp}
+                  {dayjs(message.created_at).format("DD MMM YYYY, h:mm A")}
                 </Typography>
               </Box>
             </ListItem>
