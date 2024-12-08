@@ -11,7 +11,8 @@ import { Message } from "@/index";
 import useScrollToBottom from "@/hooks/useScrollToBottom";
 
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const messages = useChatStore((state) => state.messages);
+  const setMessages = useChatStore((state) => state.setMessages);
   const chatList = useChatStore((state) => state.chatList);
   const currentChat = useChatStore((state) => state.currentChat);
   const setCurrentChat = useChatStore((state) => state.setCurrentChat);

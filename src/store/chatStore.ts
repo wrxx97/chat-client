@@ -1,17 +1,10 @@
-import { Chat, UserInfo } from "..";
+import { Chat, Message, UserInfo } from "..";
 import { create } from "zustand";
 import { getChatMsgs } from "../api/chat";
 import { getAccessToken } from "@/utils/token";
 import { jwtDecode } from "jwt-decode";
 
-interface Message {
-  id: string;
-  user: string;
-  content: string;
-  timestamp: string;
-}
-
-interface ChatStore {
+type ChatStore = {
   messages: Message[];
   users: UserInfo[];
   connectionStatus: "connected" | "disconnected";
@@ -25,7 +18,7 @@ interface ChatStore {
   setChatList: (chatList: Chat[]) => void;
   setCurrentChat: (chat: Chat) => void;
   setMessages: (messages: Message[]) => void;
-}
+};
 
 function getInitCurrentUser() {
   const token = getAccessToken();

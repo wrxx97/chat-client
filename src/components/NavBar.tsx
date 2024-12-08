@@ -34,6 +34,7 @@ const NavBar = () => {
 
   return (
     <Tabs
+      selectionFollowsFocus
       value={selectedTab}
       onChange={handleTabChange}
       orientation="vertical"
