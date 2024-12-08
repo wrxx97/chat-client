@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 
-const MessageSend = () => {
+type MessageSendProps = {
+  onSendMessage: (content: string) => void;
+};
+
+const MessageSend = ({ onSendMessage }: MessageSendProps) => {
   const [currentMessage, setCurrentMessage] = useState("");
 
-  const currentUser = "Bob";
-  const handleSend = () => {};
+  const handleSend = () => {
+    onSendMessage(currentMessage);
+    setCurrentMessage("");
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter") {

@@ -13,7 +13,6 @@ client.interceptors.request.use(
   (config) => {
     // 添加token
     const token = getAccessToken();
-    console.log(token);
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -35,6 +34,10 @@ client.interceptors.response.use(
 
     // 调用全局错误处理工具
     showGlobalError(message);
+
+    if (status === "403") {
+      window.location.href = "/";
+    }
 
     // 继续抛出错误，便于业务代码需要时捕获
     return Promise.reject({ message, status });

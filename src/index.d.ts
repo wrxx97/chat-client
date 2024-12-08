@@ -36,15 +36,22 @@ export type Chat = {
 };
 
 export type Message = {
-  id: number;
+  id?: number;
   chat_id: number;
   sender_id: number;
   content: string;
   created_at: string;
+  _sending?: boolean;
 };
 
 export type CreateChat = {
   name: string;
   public: bool;
   members: number[];
+};
+
+export type PostMessage = {
+  chatId: number;
+  content: string;
+  senderId: number;
 };

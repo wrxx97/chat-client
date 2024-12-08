@@ -5,13 +5,14 @@ import { useChatStore } from "@/store";
 
 type MessageListProps = {
   messages: Message[];
+  ref: React.RefObject<HTMLElement | null>;
 };
 
 type MessageDetail = {
   sender: UserInfo;
 } & Message;
 
-const MessageList = ({ messages }: MessageListProps) => {
+const MessageList = ({ messages, ref }: MessageListProps) => {
   const users = useChatStore((store) => store.users);
   const currentUser = useChatStore((store) => store.currentUser)!;
 
@@ -33,6 +34,7 @@ const MessageList = ({ messages }: MessageListProps) => {
 
   return (
     <Box
+      ref={ref}
       sx={{
         height: "100%",
         overflowY: "auto",

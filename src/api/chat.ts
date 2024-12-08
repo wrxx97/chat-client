@@ -1,5 +1,5 @@
 import client from ".";
-import { CreateChat } from "..";
+import { CreateChat, PostMessage } from "..";
 
 export const addChat = async (data: CreateChat) => {
   const res = await client.post("/chats", data);
@@ -12,11 +12,16 @@ export const getChatList = async () => {
 };
 
 export const getChatMsgs = async (chatId: number) => {
+  if (!chatId) return [];
   const res = await client.get(`/chats/${chatId}/messages`);
   return res.data;
 };
 
-export const postMsgs = async (chatId: number, content: string) => {
-  const res = await client.post(`/chats/${chatId}/messages`, { content });
+export const postMsgs = async ({ chatId, content, senderId }: PostMessage) => {
+  const res = await client.post(`/chats/${chatId}/messages`, {
+    content,
+    chat_id: chatId,
+    sender_id: senderId,
+  });
   return res.data;
 };

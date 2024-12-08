@@ -1,4 +1,4 @@
-import { memo, useRef, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Box, Typography, Container, Avatar, IconButton } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CloseIcon from "@mui/icons-material/Close";
@@ -8,9 +8,10 @@ import { jwtDecode } from "jwt-decode";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import useWindowResize from "../hooks/useWindowResize";
-import { setAccessToken } from "../utils/token";
+import { getAccessToken, setAccessToken } from "../utils/token";
 import { UserInfo } from "..";
 import { useAppStore } from "../store";
+import { useNavigate } from "react-router";
 
 export interface LoginFormProps {
   email: string;
@@ -20,9 +21,8 @@ export interface LoginFormProps {
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const setCurrentUser = useAppStore((state) => state.setUser);
-
-  const pageRef = useRef<HTMLDivElement>(null);
-  useWindowResize(pageRef);
+  const navigate = useNavigate();
+  const pageRef = useWindowResize();
 
   const handleClose = () => {
     return getCurrentWindow().close();
@@ -33,6 +33,13 @@ const LoginPage = () => {
     const decoded: UserInfo = jwtDecode(token);
     setCurrentUser(decoded);
   };
+
+  useEffect(() => {
+    const accessToken = getAccessToken();
+    if (accessToken) {
+      navigate("/chat");
+    }
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs" ref={pageRef}>

@@ -1,6 +1,6 @@
 import { Chat, UserInfo } from "..";
 import { create } from "zustand";
-import { getChatList } from "../api/chat";
+import { getChatMsgs } from "../api/chat";
 import { getAccessToken } from "@/utils/token";
 import { jwtDecode } from "jwt-decode";
 
@@ -24,6 +24,7 @@ interface ChatStore {
   setConnectionStatus: (status: "connected" | "disconnected") => void;
   setChatList: (chatList: Chat[]) => void;
   setCurrentChat: (chat: Chat) => void;
+  setMessages: (messages: Message[]) => void;
 }
 
 function getInitCurrentUser() {
@@ -35,7 +36,7 @@ function getInitCurrentUser() {
   return decoded;
 }
 
-export const useChatStore = create<ChatStore>((set) => ({
+export const useChatStore = create<ChatStore>((set, get) => ({
   chatList: [],
   currentChat: null,
   currentUser: getInitCurrentUser(),
@@ -47,9 +48,20 @@ export const useChatStore = create<ChatStore>((set) => ({
     set((state) => ({
       messages: [...state.messages, message],
     })),
+  setMessages: (messages) => set({ messages }),
   setUsers: (users) => set({ users }),
   setCurrentUser: (user) => set({ currentUser: user }),
   setConnectionStatus: (status) => set({ connectionStatus: status }),
   setChatList: (chatList: Chat[]) => set({ chatList }),
-  setCurrentChat: (chat: Chat) => set({ currentChat: chat }),
+  setCurrentChat: (chat: Chat) => {
+    const preId = get().currentChat?.id;
+    if (preId && preId === chat.id) {
+      return;
+    }
+    getChatMsgs(chat.id).then((data) => {
+      console.log(data);
+      set({ messages: data });
+    });
+    set({ currentChat: chat });
+  },
 }));

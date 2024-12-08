@@ -1,9 +1,10 @@
 import { Box, TextField, Button, Typography } from "@mui/material";
-import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
+
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { login } from "../api/auth";
 import { LoginInputs } from "..";
+import { resizeChatWindow } from "@/utils/window";
 
 interface LoginProps {
   onSwitch: () => void;
@@ -17,12 +18,10 @@ const Login = ({ onSwitch, onGetToken }: LoginProps) => {
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     // console.log(data);
     let ret = await login(data);
-    console.log(ret);
     if (ret?.token) {
       onGetToken(ret.token);
       navgiate("/chat");
-      const appWindow = getCurrentWindow();
-      appWindow.setSize(new LogicalSize(800, 600));
+      resizeChatWindow();
     }
   };
 

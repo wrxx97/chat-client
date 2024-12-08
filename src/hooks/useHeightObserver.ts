@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const useHeightObserver = (
-  targetRef: React.RefObject<HTMLElement>,
+  targetRef: React.RefObject<HTMLElement | null>,
   cb: Function
 ): number => {
   const [height, setHeight] = useState<number>(0);
