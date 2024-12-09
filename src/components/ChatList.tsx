@@ -1,50 +1,50 @@
-import React, { useEffect } from "react";
+import type { Chat } from '..'
+import { useChatStore } from '@/store'
 import {
+  Avatar,
+  Box,
+  Divider,
   List,
   ListItemAvatar,
-  Avatar,
+  ListItemButton,
   ListItemText,
   Typography,
-  Divider,
-  Box,
-  ListItemButton,
-} from "@mui/material";
-import { Chat } from "..";
-import Search from "./SearchHeader";
-import { useChatStore } from "@/store";
-import dayjs from "dayjs";
+} from '@mui/material'
+import dayjs from 'dayjs'
+import { Fragment } from 'react'
+import Search from './SearchHeader'
 
 interface ChatListProps {
-  chats: Chat[];
-  onSelect: (chat: Chat) => void;
+  chats: Chat[]
+  onSelect: (chat: Chat) => void
 }
 
-const ChatList = ({ chats, onSelect }: ChatListProps) => {
-  const currentChat = useChatStore((state) => state.currentChat);
+function ChatList({ chats, onSelect }: ChatListProps) {
+  const currentChat = useChatStore(state => state.currentChat)
   const handleChatClick = (chat: Chat) => {
-    onSelect(chat);
-  };
+    onSelect(chat)
+  }
 
   return (
     <Box
       sx={{
         width: 300,
-        height: "100%",
+        height: '100%',
         borderRight: 1,
-        borderColor: "divider",
+        borderColor: 'divider',
       }}
     >
       <Search />
       <List
         sx={{
-          height: "100%",
-          overflowY: "auto",
+          height: '100%',
+          overflowY: 'auto',
         }}
       >
         {chats
           .sort((a, b) => (dayjs(a.created_at).isBefore(b.created_at) ? 0 : -1))
-          .map((chat) => (
-            <React.Fragment key={chat.id}>
+          .map(chat => (
+            <Fragment key={chat.id}>
               <ListItemButton
                 alignItems="flex-start"
                 onClick={() => handleChatClick(chat)}
@@ -54,13 +54,13 @@ const ChatList = ({ chats, onSelect }: ChatListProps) => {
                   <Avatar alt={chat.name} src={chat.name} />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={
+                  primary={(
                     <Typography variant="subtitle1" noWrap>
                       {chat.name}
                     </Typography>
-                  }
-                  secondary={
-                    <React.Fragment>
+                  )}
+                  secondary={(
+                    <>
                       <Typography
                         component="span"
                         variant="body2"
@@ -73,20 +73,20 @@ const ChatList = ({ chats, onSelect }: ChatListProps) => {
                         component="span"
                         variant="caption"
                         color="text.secondary"
-                        style={{ float: "right" }}
+                        style={{ float: 'right' }}
                       >
-                        {dayjs(chat.created_at).format("HH:mm")}
+                        {dayjs(chat.created_at).format('HH:mm')}
                       </Typography>
-                    </React.Fragment>
-                  }
+                    </>
+                  )}
                 />
               </ListItemButton>
               <Divider variant="inset" component="li" />
-            </React.Fragment>
+            </Fragment>
           ))}
       </List>
     </Box>
-  );
-};
+  )
+}
 
-export default ChatList;
+export default ChatList

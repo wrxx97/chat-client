@@ -1,38 +1,39 @@
-import { useState } from "react";
-import { Box, TextField, Button } from "@mui/material";
+import { Box, Button, TextField } from '@mui/material'
+import { useState } from 'react'
 
-type MessageSendProps = {
-  onSendMessage: (content: string) => void;
-};
+interface MessageSendProps {
+  onSendMessage: (content: string) => void
+}
 
-const MessageSend = ({ onSendMessage }: MessageSendProps) => {
-  const [currentMessage, setCurrentMessage] = useState("");
+function MessageSend({ onSendMessage }: MessageSendProps) {
+  const [currentMessage, setCurrentMessage] = useState('')
 
   const handleSend = () => {
-    onSendMessage(currentMessage);
-    setCurrentMessage("");
-  };
+    onSendMessage(currentMessage)
+    setCurrentMessage('')
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       if (e.ctrlKey) {
         // Ctrl+Enter：插入换行
-        setCurrentMessage((prev) => prev + "\n");
-      } else {
+        setCurrentMessage(prev => `${prev}\n`)
+      }
+      else {
         // Enter：发送消息
-        e.preventDefault(); // 防止换行
-        if (currentMessage.trim() !== "") {
-          onSendMessage(currentMessage.trim());
-          setCurrentMessage(""); // 清空输入框
+        e.preventDefault() // 防止换行
+        if (currentMessage.trim() !== '') {
+          onSendMessage(currentMessage.trim())
+          setCurrentMessage('') // 清空输入框
         }
       }
     }
-  };
+  }
 
   return (
     <Box
       sx={{
-        display: "flex",
+        display: 'flex',
         m: 2,
       }}
     >
@@ -45,7 +46,7 @@ const MessageSend = ({ onSendMessage }: MessageSendProps) => {
         minRows={1}
         maxRows={5}
         onKeyDown={handleKeyDown}
-        onChange={(e) => setCurrentMessage(e.target.value)}
+        onChange={e => setCurrentMessage(e.target.value)}
       />
       <Button
         variant="contained"
@@ -56,7 +57,7 @@ const MessageSend = ({ onSendMessage }: MessageSendProps) => {
         Send
       </Button>
     </Box>
-  );
-};
+  )
+}
 
-export default MessageSend;
+export default MessageSend

@@ -1,12 +1,12 @@
-import client from ".";
-import { LoginInputs, RegisterInputs } from "..";
+import type { LoginInputs, RegisterInputs } from '..'
+import client from '.'
 
-export const login = async (user: LoginInputs) => {
-  const response = await client.post("/signin", user);
-  return response.data;
-};
+export async function login(user: LoginInputs) {
+  const response = await client.post('/signin', user)
+  return response.data
+}
 
-export const register = async (user: RegisterInputs) => {
-  const response = await client.post("/signup", user);
-  return response.data;
-};
+export async function register(user: RegisterInputs) {
+  const response = await client.post('/signup', user)
+  return response.data
+}

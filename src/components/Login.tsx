@@ -1,29 +1,30 @@
-import { Box, TextField, Button, Typography } from "@mui/material";
+import type { SubmitHandler } from 'react-hook-form'
 
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router";
-import { login } from "../api/auth";
-import { LoginInputs } from "..";
-import { resizeChatWindow } from "@/utils/window";
+import type { LoginInputs } from '..'
+import { resizeChatWindow } from '@/utils/window'
+import { Box, Button, TextField, Typography } from '@mui/material'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
+import { login } from '../api/auth'
 
 interface LoginProps {
-  onSwitch: () => void;
-  onGetToken: (token: string) => void;
+  onSwitch: () => void
+  onGetToken: (token: string) => void
 }
 
-const Login = ({ onSwitch, onGetToken }: LoginProps) => {
-  const navgiate = useNavigate();
-  const { register, handleSubmit } = useForm<LoginInputs>();
+function Login({ onSwitch, onGetToken }: LoginProps) {
+  const navgiate = useNavigate()
+  const { register, handleSubmit } = useForm<LoginInputs>()
 
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     // console.log(data);
-    let ret = await login(data);
+    const ret = await login(data)
     if (ret?.token) {
-      onGetToken(ret.token);
-      navgiate("/chat");
-      resizeChatWindow();
+      onGetToken(ret.token)
+      navgiate('/chat')
+      resizeChatWindow()
     }
-  };
+  }
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
@@ -36,7 +37,7 @@ const Login = ({ onSwitch, onGetToken }: LoginProps) => {
         autoComplete="email"
         variant="standard"
         autoFocus
-        {...register("email", { required: true })}
+        {...register('email', { required: true })}
       />
       <TextField
         id="password"
@@ -47,7 +48,7 @@ const Login = ({ onSwitch, onGetToken }: LoginProps) => {
         type="password"
         autoComplete="current-password"
         variant="standard"
-        {...register("password", { required: true })}
+        {...register('password', { required: true })}
       />
 
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
@@ -55,9 +56,9 @@ const Login = ({ onSwitch, onGetToken }: LoginProps) => {
       </Button>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <Typography variant="body2" component="div">
@@ -66,9 +67,9 @@ const Login = ({ onSwitch, onGetToken }: LoginProps) => {
             variant="body2"
             component="span"
             sx={{
-              textDecoration: "none",
-              cursor: "pointer",
-              color: "primary.main",
+              textDecoration: 'none',
+              cursor: 'pointer',
+              color: 'primary.main',
             }}
             onClick={onSwitch}
           >
@@ -77,7 +78,7 @@ const Login = ({ onSwitch, onGetToken }: LoginProps) => {
         </Typography>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

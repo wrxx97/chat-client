@@ -1,26 +1,27 @@
-import { Box, TextField, Button, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
-import { register as registerUser } from "../api/auth";
-import { RegisterInputs } from "..";
+import type { SubmitHandler } from 'react-hook-form'
+import type { RegisterInputs } from '..'
+import { Box, Button, TextField, Typography } from '@mui/material'
+import Grid from '@mui/material/Grid2'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
+import { register as registerUser } from '../api/auth'
 
 interface RegisterProps {
-  onSwitch: () => void;
-  onGetToken: (token: string) => void;
+  onSwitch: () => void
+  onGetToken: (token: string) => void
 }
 
-const Register = ({ onSwitch, onGetToken }: RegisterProps) => {
-  const navgiate = useNavigate();
-  const { register, handleSubmit } = useForm<RegisterInputs>();
+function Register({ onSwitch, onGetToken }: RegisterProps) {
+  const navgiate = useNavigate()
+  const { register, handleSubmit } = useForm<RegisterInputs>()
 
   const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
-    const ret = await registerUser(data);
+    const ret = await registerUser(data)
     if (ret?.token) {
-      onGetToken(ret.token);
-      navgiate("/feedback");
+      onGetToken(ret.token)
+      navgiate('/feedback')
     }
-  };
+  }
 
   return (
     <Box
@@ -36,7 +37,7 @@ const Register = ({ onSwitch, onGetToken }: RegisterProps) => {
             id="fullname"
             label="Full Name"
             variant="standard"
-            {...register("fullname", { required: true })}
+            {...register('fullname', { required: true })}
           />
         </Grid>
         <Grid size={12}>
@@ -44,7 +45,7 @@ const Register = ({ onSwitch, onGetToken }: RegisterProps) => {
             fullWidth
             label="Workspace"
             variant="standard"
-            {...register("workspace", { required: true })}
+            {...register('workspace', { required: true })}
           />
         </Grid>
         <Grid size={12}>
@@ -53,7 +54,7 @@ const Register = ({ onSwitch, onGetToken }: RegisterProps) => {
             label="Email Address"
             type="email"
             variant="standard"
-            {...register("email", { required: true })}
+            {...register('email', { required: true })}
           />
         </Grid>
         <Grid size={12}>
@@ -62,7 +63,7 @@ const Register = ({ onSwitch, onGetToken }: RegisterProps) => {
             label="Password"
             type="password"
             variant="standard"
-            {...register("password", { required: true })}
+            {...register('password', { required: true })}
           />
         </Grid>
       </Grid>
@@ -77,9 +78,9 @@ const Register = ({ onSwitch, onGetToken }: RegisterProps) => {
               variant="body2"
               component="span"
               sx={{
-                textDecoration: "none",
-                cursor: "pointer",
-                color: "primary.main",
+                textDecoration: 'none',
+                cursor: 'pointer',
+                color: 'primary.main',
               }}
               onClick={onSwitch}
             >
@@ -89,7 +90,7 @@ const Register = ({ onSwitch, onGetToken }: RegisterProps) => {
         </Grid>
       </Grid>
     </Box>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

@@ -1,28 +1,28 @@
-import { Route, Routes } from "react-router";
-import ChatLayout from "./pages/chat";
+import { Box } from '@mui/material'
+import CssBaseline from '@mui/material/CssBaseline'
 
-import Login from "./pages/login";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import Feedback from "./pages/feedback";
-import "./App.css";
-import { Box } from "@mui/material";
-import { useEffect, useMemo, useRef } from "react";
-import { useAppStore } from "./store";
-import { ErrorProvider } from "./hooks/useError";
-import ErrorSnackbar from "./components/ErrorSnackBar";
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { useMemo, useRef } from 'react'
+import { Route, Routes } from 'react-router'
+import { ErrorProvider } from './components/ErrorProvider'
+import ErrorSnackbar from './components/ErrorSnackBar'
+import ChatLayout from './pages/chat'
+import Feedback from './pages/feedback'
+import Login from './pages/login'
+import { useAppStore } from './store'
+import './App.css'
 
 function App() {
-  const mainRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null)
 
-  const darkMode = useAppStore((state) => state.darkMode);
+  const darkMode = useAppStore(state => state.darkMode)
   const theme = useMemo(() => {
     return createTheme({
       palette: {
-        mode: darkMode ? "dark" : "light",
+        mode: darkMode ? 'dark' : 'light',
       },
-    });
-  }, [darkMode]);
+    })
+  }, [darkMode])
 
   return (
     <ErrorProvider>
@@ -30,10 +30,10 @@ function App() {
         <CssBaseline />
         <Box
           sx={{
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
           }}
           data-tauri-drag-region
           ref={mainRef}
@@ -48,7 +48,7 @@ function App() {
       </ThemeProvider>
       <ErrorSnackbar />
     </ErrorProvider>
-  );
+  )
 }
 
-export default App;
+export default App

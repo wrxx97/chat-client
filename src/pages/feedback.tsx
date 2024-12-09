@@ -1,14 +1,14 @@
-import { Box, Typography, Button, Container } from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { useNavigate } from "react-router";
-import { memo } from "react";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import { Box, Button, Container, Typography } from '@mui/material'
+import { memo } from 'react'
+import { useNavigate } from 'react-router'
 
-const RegistrationSuccess = () => {
-  const navigate = useNavigate();
+function RegistrationSuccess() {
+  const navigate = useNavigate()
 
   const handleBackToHome = () => {
-    navigate("/");
-  };
+    navigate('/')
+  }
 
   return (
     <Container maxWidth="sm">
@@ -16,12 +16,12 @@ const RegistrationSuccess = () => {
         sx={{
           mt: 8,
           p: 4,
-          textAlign: "center",
-          bgcolor: "background.paper",
+          textAlign: 'center',
+          bgcolor: 'background.paper',
         }}
       >
         <CheckCircleOutlineIcon
-          sx={{ fontSize: 80, color: "success.main", mb: 2 }}
+          sx={{ fontSize: 80, color: 'success.main', mb: 2 }}
         />
         <Typography variant="h4" component="h1" gutterBottom>
           Registration Successful!
@@ -40,7 +40,7 @@ const RegistrationSuccess = () => {
         </Button>
       </Box>
     </Container>
-  );
-};
+  )
+}
 
-export default memo(RegistrationSuccess);
+export default memo(RegistrationSuccess)

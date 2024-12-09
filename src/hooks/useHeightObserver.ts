@@ -1,36 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
-const useHeightObserver = (
+function useHeightObserver(
   targetRef: React.RefObject<HTMLElement | null>,
-  cb: Function
-): number => {
-  const [height, setHeight] = useState<number>(0);
+  cb: (height: number) => void,
+): number {
+  const [height, setHeight] = useState<number>(0)
 
   useEffect(() => {
-    const handleResize = (entries: ResizeObserverEntry[]) => {
-      for (let entry of entries) {
-        setHeight(entry.contentRect.height);
-        cb(entry.contentRect.height);
+    function handleResize(entries: ResizeObserverEntry[]) {
+      for (const entry of entries) {
+        setHeight(entry.contentRect.height)
+        cb(entry.contentRect.height)
       }
-    };
+    }
 
-    const observer = new ResizeObserver(handleResize);
-    const targetElement = targetRef.current;
+    const observer = new ResizeObserver(handleResize)
+    const targetElement = targetRef.current
 
     if (targetElement) {
-      observer.observe(targetElement);
-      setHeight(targetElement.clientHeight); // 初始化高度
+      observer.observe(targetElement)
+      setHeight(targetElement.clientHeight) // 初始化高度
     }
 
     return () => {
       if (targetElement) {
-        observer.unobserve(targetElement);
+        observer.unobserve(targetElement)
       }
-      observer.disconnect();
-    };
-  }, [targetRef]);
+      observer.disconnect()
+    }
+  }, [cb, targetRef])
 
-  return height;
-};
+  return height
+}
 
-export default useHeightObserver;
+export default useHeightObserver

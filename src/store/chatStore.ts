@@ -1,32 +1,32 @@
-import { Chat, Message, UserInfo } from "..";
-import { create } from "zustand";
-import { getChatMsgs } from "../api/chat";
-import { getAccessToken } from "@/utils/token";
-import { jwtDecode } from "jwt-decode";
+import type { Chat, Message, UserInfo } from '..'
+import { getAccessToken } from '@/utils/token'
+import { jwtDecode } from 'jwt-decode'
+import { create } from 'zustand'
+import { getChatMsgs } from '../api/chat'
 
-type ChatStore = {
-  messages: Message[];
-  users: UserInfo[];
-  connectionStatus: "connected" | "disconnected";
-  currentUser: UserInfo | null;
-  chatList: Chat[];
-  currentChat: Chat | null;
-  setCurrentUser: (user: UserInfo) => void;
-  addMessage: (message: Message) => void;
-  setUsers: (users: UserInfo[]) => void;
-  setConnectionStatus: (status: "connected" | "disconnected") => void;
-  setChatList: (chatList: Chat[]) => void;
-  setCurrentChat: (chat: Chat) => void;
-  setMessages: (messages: Message[]) => void;
-};
+interface ChatStore {
+  messages: Message[]
+  users: UserInfo[]
+  connectionStatus: 'connected' | 'disconnected'
+  currentUser: UserInfo | null
+  chatList: Chat[]
+  currentChat: Chat | null
+  setCurrentUser: (user: UserInfo) => void
+  addMessage: (message: Message) => void
+  setUsers: (users: UserInfo[]) => void
+  setConnectionStatus: (status: 'connected' | 'disconnected') => void
+  setChatList: (chatList: Chat[]) => void
+  setCurrentChat: (chat: Chat) => void
+  setMessages: (messages: Message[]) => void
+}
 
 function getInitCurrentUser() {
-  const token = getAccessToken();
+  const token = getAccessToken()
   if (!token) {
-    return null;
+    return null
   }
-  const decoded: UserInfo = jwtDecode(token);
-  return decoded;
+  const decoded: UserInfo = jwtDecode(token)
+  return decoded
 }
 
 export const useChatStore = create<ChatStore>((set, get) => ({
@@ -35,26 +35,25 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   currentUser: getInitCurrentUser(),
   messages: [],
   users: [],
-  connectionStatus: "disconnected",
+  connectionStatus: 'disconnected',
 
-  addMessage: (message) =>
-    set((state) => ({
+  addMessage: message =>
+    set(state => ({
       messages: [...state.messages, message],
     })),
-  setMessages: (messages) => set({ messages }),
-  setUsers: (users) => set({ users }),
-  setCurrentUser: (user) => set({ currentUser: user }),
-  setConnectionStatus: (status) => set({ connectionStatus: status }),
+  setMessages: messages => set({ messages }),
+  setUsers: users => set({ users }),
+  setCurrentUser: user => set({ currentUser: user }),
+  setConnectionStatus: status => set({ connectionStatus: status }),
   setChatList: (chatList: Chat[]) => set({ chatList }),
   setCurrentChat: (chat: Chat) => {
-    const preId = get().currentChat?.id;
+    const preId = get().currentChat?.id
     if (preId && preId === chat.id) {
-      return;
+      return
     }
     getChatMsgs(chat.id).then((data) => {
-      console.log(data);
-      set({ messages: data });
-    });
-    set({ currentChat: chat });
+      set({ messages: data })
+    })
+    set({ currentChat: chat })
   },
-}));
+}))

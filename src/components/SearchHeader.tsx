@@ -1,29 +1,29 @@
-import { Box, IconButton, InputAdornment, OutlinedInput } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
+import AddIcon from '@mui/icons-material/Add'
+import SearchIcon from '@mui/icons-material/Search'
+import { Box, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
 
 export default function Search() {
   return (
     <Box
       sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
       }}
     >
       <OutlinedInput
         id="input-with-icon-adornment"
         placeholder="Search"
-        startAdornment={
+        startAdornment={(
           <InputAdornment position="start">
             <SearchIcon />
           </InputAdornment>
-        }
+        )}
         sx={{
-          width: "auto",
-          m: 2,
-          ".MuiOutlinedInput-input": {
-            padding: "4px 14px",
+          'width': 'auto',
+          'm': 2,
+          '.MuiOutlinedInput-input': {
+            padding: '4px 14px',
           },
         }}
       />
@@ -31,5 +31,5 @@ export default function Search() {
         <AddIcon />
       </IconButton>
     </Box>
-  );
+  )
 }

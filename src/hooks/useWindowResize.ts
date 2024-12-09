@@ -1,17 +1,17 @@
-import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
-import { useRef } from "react";
+import { getCurrentWindow, LogicalSize } from '@tauri-apps/api/window'
+import { useRef } from 'react'
 
-import useHeightObserver from "./useHeightObserver";
+import useHeightObserver from './useHeightObserver'
 
-const useWindowResize = () => {
-  const appWindow = getCurrentWindow();
-  const targetRef = useRef<HTMLElement>(null);
+function useWindowResize() {
+  const appWindow = getCurrentWindow()
+  const targetRef = useRef<HTMLElement>(null)
 
   useHeightObserver(targetRef, (height: number) => {
-    appWindow.setSize(new LogicalSize(600, height));
-  });
+    appWindow.setSize(new LogicalSize(600, height))
+  })
 
-  return targetRef;
-};
+  return targetRef
+}
 
-export default useWindowResize;
+export default useWindowResize

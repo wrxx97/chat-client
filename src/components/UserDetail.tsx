@@ -1,58 +1,58 @@
-import { Box, Button, Card, CardContent, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import dayjs from "dayjs";
-import { UserInfo } from "..";
-import { addChat } from "@/api/chat";
-import { useChatStore } from "@/store";
-import { useNavigate } from "react-router";
+import type { UserInfo } from '..'
+import { addChat } from '@/api/chat'
+import { useChatStore } from '@/store'
+import { Box, Button, Card, CardContent, Typography } from '@mui/material'
+import Grid from '@mui/material/Grid2'
+import dayjs from 'dayjs'
+import { useNavigate } from 'react-router'
 
 interface UserDetailProps {
-  user: UserInfo | null;
+  user: UserInfo | null
 }
 
-const UserDetails = ({ user }: UserDetailProps) => {
-  const currentUser = useChatStore((state) => state.currentUser)!;
-  const setCurrentChat = useChatStore((state) => state.setCurrentChat);
-  const navgiate = useNavigate();
+function UserDetails({ user }: UserDetailProps) {
+  const currentUser = useChatStore(state => state.currentUser)!
+  const setCurrentChat = useChatStore(state => state.setCurrentChat)
+  const navgiate = useNavigate()
 
   if (!user) {
     return (
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          width: "calc(100% - 350px)",
-          backgroundColor: "#f5f5f5",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          width: 'calc(100% - 350px)',
+          backgroundColor: 'background.paper',
           padding: 2,
         }}
       >
         <Typography variant="h5">Please select a user</Typography>
       </Box>
-    );
+    )
   }
 
   const handleAddChat = () => {
     addChat({
-      name: "default",
+      name: 'default',
       members: [user.id, currentUser.id],
       public: false,
     }).then((res) => {
-      navgiate(`/chat?chat_id=${res.id}`);
-      setCurrentChat(res);
-    });
-  };
+      navgiate(`/chat?chat_id=${res.id}`)
+      setCurrentChat(res)
+    })
+  }
 
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-        width: "calc(100% - 350px)",
-        backgroundColor: "#f5f5f5",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: 'calc(100% - 350px)',
+        backgroundColor: 'background.paper',
         padding: 2,
       }}
     >
@@ -87,7 +87,7 @@ const UserDetails = ({ user }: UserDetailProps) => {
             </Grid>
             <Grid size={8}>
               <Typography variant="body1">
-                {dayjs(user.created_at).format("DD MMM YYYY")}
+                {dayjs(user.created_at).format('DD MMM YYYY')}
               </Typography>
             </Grid>
           </Grid>
@@ -105,7 +105,7 @@ const UserDetails = ({ user }: UserDetailProps) => {
         </CardContent>
       </Card>
     </Box>
-  );
-};
+  )
+}
 
-export default UserDetails;
+export default UserDetails

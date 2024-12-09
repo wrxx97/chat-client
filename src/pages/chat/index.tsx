@@ -1,70 +1,76 @@
-import { Box } from "@mui/material";
-import { Route, Routes } from "react-router";
-import NavBar from "@components/NavBar";
-import Chat from "./Chat";
-import User from "./User";
-import { useEventSource } from "@/hooks/useEventSource";
-import { getAccessToken } from "@/utils/token";
-import { useEffect } from "react";
-import { useChatStore } from "@/store";
-import { Message } from "@/index";
+import type { Message } from '@/index'
+import { useEventSource } from '@/hooks/useEventSource'
+import { useChatStore } from '@/store'
+import { getAccessToken } from '@/utils/token'
+import NavBar from '@components/NavBar'
+import { Box } from '@mui/material'
+import { memo, useEffect } from 'react'
+import { Route, Routes } from 'react-router'
+import { useShallow } from 'zustand/react/shallow'
+import Chat from './Chat'
+import User from './User'
 
 enum EventTypes {
-  NewChat = "NewChat",
-  AddToChat = "AddToChat",
-  RemoveFromChat = "RemoveFromChat",
-  NewMessage = "NewMessage",
+  NewChat = 'NewChat',
+  AddToChat = 'AddToChat',
+  RemoveFromChat = 'RemoveFromChat',
+  NewMessage = 'NewMessage',
 }
 
-const ChatApp = () => {
+function ChatApp() {
   const { data, event } = useEventSource(
-    `http://0.0.0.0:6687/events?access_token=${getAccessToken()}`,
+    `${
+      import.meta.env.VITE_NOTIFICATION_SERVER_HOST
+    }/events?access_token=${getAccessToken()}`,
     [
       EventTypes.NewChat,
       EventTypes.AddToChat,
       EventTypes.RemoveFromChat,
       EventTypes.NewMessage,
-    ]
-  );
+    ],
+  )
 
-  const addMessage = useChatStore((state) => state.addMessage);
-  const currentChat = useChatStore((state) => state.currentChat);
-  const currentUser = useChatStore((state) => state.currentUser);
+  const { addMessage, currentChat, currentUser } = useChatStore(
+    useShallow(state => ({
+      addMessage: state.addMessage,
+      currentChat: state.currentChat,
+      currentUser: state.currentUser,
+    })),
+  )
 
   useEffect(() => {
+    const msg = data as Message
     if (event) {
       switch (event) {
         case EventTypes.NewChat:
-          console.log("NewChat", data);
-          break;
+          break
         case EventTypes.AddToChat:
-          console.log("AddToChat", data);
-          break;
+          break
         case EventTypes.RemoveFromChat:
-          console.log("RemoveFromChat", data);
-          break;
+          break
         case EventTypes.NewMessage:
-          if (!currentChat || !data) return;
-          let msg = data as Message;
+          if (!currentChat || !msg)
+            return
           if (
-            msg.chat_id === currentChat.id &&
-            msg.sender_id !== currentUser!.id
+            msg.chat_id === currentChat.id
+            && msg.sender_id !== currentUser!.id
           ) {
-            addMessage(msg);
+            addMessage(msg)
           }
-          break;
+          break
         default:
-          console.log("Unknown event", event, data);
+          break
       }
     }
-  }, [data, event]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [event, data])
 
   return (
     <Box
       sx={{
-        height: "100%",
-        width: "100%",
-        display: "flex",
+        height: '100%',
+        width: '100%',
+        display: 'flex',
       }}
     >
       <NavBar />
@@ -73,7 +79,7 @@ const ChatApp = () => {
         <Route path="/user" element={<User />} />
       </Routes>
     </Box>
-  );
-};
+  )
+}
 
-export default ChatApp;
+export default memo(ChatApp)
