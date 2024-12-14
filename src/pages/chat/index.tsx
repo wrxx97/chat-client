@@ -4,7 +4,7 @@ import { useChatStore } from '@/store'
 import { getAccessToken } from '@/utils/token'
 import NavBar from '@components/NavBar'
 import { Box } from '@mui/material'
-import { memo, useEffect } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { Route, Routes } from 'react-router'
 import { useShallow } from 'zustand/react/shallow'
 import Chat from './Chat'
@@ -15,19 +15,23 @@ enum EventTypes {
   AddToChat = 'AddToChat',
   RemoveFromChat = 'RemoveFromChat',
   NewMessage = 'NewMessage',
+  HeartBeat = 'heartbeat',
 }
 
 function ChatApp() {
+  const events = useMemo(() => [
+    EventTypes.NewChat,
+    EventTypes.AddToChat,
+    EventTypes.RemoveFromChat,
+    EventTypes.NewMessage,
+    EventTypes.HeartBeat,
+  ], [])
+
   const { data, event } = useEventSource(
     `${
       import.meta.env.VITE_NOTIFICATION_SERVER_HOST
     }/events?access_token=${getAccessToken()}`,
-    [
-      EventTypes.NewChat,
-      EventTypes.AddToChat,
-      EventTypes.RemoveFromChat,
-      EventTypes.NewMessage,
-    ],
+    events,
   )
 
   const { addMessage, currentChat, currentUser } = useChatStore(

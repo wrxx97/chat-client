@@ -26,7 +26,7 @@ function NavBar() {
 
   const [selectedTab, setSelectedTab] = useState(getSelectedTab())
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: string) => {
     setSelectedTab(newValue)
     navgiate(`/chat${newValue}`)
   }

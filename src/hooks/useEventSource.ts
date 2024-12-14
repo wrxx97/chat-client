@@ -14,6 +14,7 @@ export interface EventSourceReturn<T extends string[]> {
 export function useEventSource<Events extends string[]>(
   url: URL | string,
   events: Events = [] as unknown as Events,
+  // FIX: 未传入options,每次都会是一个新的对象
   options: EventSourceOptions = {},
 ): EventSourceReturn<Events> {
   const [status, setStatus] = useState('connecting')
@@ -22,7 +23,7 @@ export function useEventSource<Events extends string[]>(
   const [data, setData] = useState<unknown | null>(null)
 
   useEffect(() => {
-    const eventSource = new EventSource(url.toString())
+    const eventSource = new EventSource(url)
     let retried = 0
 
     const eventCallbacks = events.map((type) => {
@@ -78,7 +79,7 @@ export function useEventSource<Events extends string[]>(
         eventSource.removeEventListener(e.type, e.callback)
       })
     }
-  }, [url, events, options])
+  }, [url, events])
 
   return {
     status,
